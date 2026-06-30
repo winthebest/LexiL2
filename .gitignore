@@ -1,0 +1,13 @@
+node_modules
+dist
+dist-ssr
+*.local
+
+# Bảo mật: KHÔNG commit key (xem docs/adr.md ADR-0005)
+.env
+.env.*
+!.env.example
+
+.venv
+.DS_Store
+*.log

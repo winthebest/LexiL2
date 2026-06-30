@@ -1,0 +1,52 @@
+{
+  "word": "loquacious",
+  "ipa": "/loʊˈkweɪʃəs/",
+  "syllable_stress": "loh-KWAY-shuhs",
+  "part_of_speech": ["adjective"],
+  "register": "formal",
+  "connotation": "neutral",
+  "core_meaning_en": "tending to talk a lot",
+  "vi_anchor": "lắm lời, hoạt ngôn",
+  "etymology": {
+    "breakdown": [
+      { "part": "loqu", "type": "root", "meaning": "to speak", "origin": "Latin (loqui)" },
+      { "part": "-acious", "type": "suffix", "meaning": "tending to / full of", "origin": "Latin" }
+    ],
+    "confidence": "high",
+    "note": "Cùng gốc 'loqu' với rất nhiều từ GRE khác — học gốc này mở khóa cả họ."
+  },
+  "word_family": [
+    { "word": "eloquent", "gloss_en": "fluent and persuasive in speech", "vi": "hùng biện" },
+    { "word": "circumlocution", "gloss_en": "using too many words; talking around a point", "vi": "nói vòng vo" },
+    { "word": "soliloquy", "gloss_en": "speaking your thoughts aloud when alone", "vi": "độc thoại" },
+    { "word": "grandiloquent", "gloss_en": "using big, showy language", "vi": "khoa trương, ba hoa" },
+    { "word": "loquacity", "gloss_en": "the quality of talking a lot", "vi": "tính lắm lời" }
+  ],
+  "mnemonic_vi": {
+    "keyword": "loa",
+    "image": "Âm đầu 'loqua-' nghe như 'loa'. Hình dung một cái loa phường mở hết cỡ, ra rả nói cả ngày không nghỉ — đó là người loquacious."
+  },
+  "examples": [
+    {
+      "sentence": "The loquacious tour guide barely paused for breath, naming every shop we passed.",
+      "why": "Cho thấy sắc thái 'nói nhiều đến mức hơi mệt cho người nghe'."
+    },
+    {
+      "sentence": "Normally reserved, she grew surprisingly loquacious after a glass of wine.",
+      "why": "Đặt cạnh 'reserved' để làm nổi nghĩa, và cho thấy đây là từ trang trọng."
+    }
+  ],
+  "synonym_cluster": {
+    "theme_vi": "nói nhiều",
+    "members": [
+      { "word": "talkative", "intensity": 2, "register": "neutral", "note": "trung tính, đời thường nhất" },
+      { "word": "loquacious", "intensity": 3, "register": "formal", "note": "trang trọng, trôi chảy, không hẳn chê" },
+      { "word": "voluble", "intensity": 3, "register": "formal", "note": "nói nhanh, trôi như suối" },
+      { "word": "garrulous", "intensity": 4, "register": "neutral", "note": "TIÊU CỰC: nói lan man về chuyện vặt" },
+      { "word": "verbose", "intensity": 4, "register": "formal", "note": "TIÊU CỰC: thừa chữ, nhất là trong VIẾT" }
+    ]
+  },
+  "tricky_senses": [],
+  "antonyms": ["taciturn", "reticent", "laconic", "reserved"],
+  "difficulty": 4
+}

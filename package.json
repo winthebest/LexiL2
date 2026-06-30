@@ -1,0 +1,23 @@
+{
+  "name": "gre-vocab-l2-companion",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "GRE Vocab L2 Companion — nhập 1 từ GRE, AI sinh thẻ từ tối ưu cho người Việt (Qwen).",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "dexie": "^4.4.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "@vitejs/plugin-react": "^4.3.4",
+    "tailwindcss": "^4.1.11",
+    "vite": "^6.3.5"
+  }
+}
