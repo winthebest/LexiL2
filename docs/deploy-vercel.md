@@ -20,11 +20,20 @@ DASHSCOPE_API_KEY=sk-...
 DASHSCOPE_WORKSPACE_ID=llm-...
 QWEN_MODEL=qwen3.7-plus
 QWEN_VERIFIER_MODEL=qwen3.7-max
+VITE_SUPABASE_URL=https://xxxxxxxxxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJ...
+VITE_SYNC_PROFILE_ID=my-gre
+# Optional, chỉ dùng nếu app được khóa hoặc bạn chấp nhận secret nằm trong frontend bundle:
+# VITE_SYNC_SECRET=your-long-random-sync-secret
 ```
 
 `QWEN_MODEL` và `QWEN_VERIFIER_MODEL` là tùy chọn, nhưng nên đặt rõ để dễ kiểm soát.
+`VITE_SUPABASE_URL` và `VITE_SUPABASE_ANON_KEY` chỉ dùng để prefill màn Đồng bộ;
+`VITE_SYNC_PROFILE_ID` prefill Profile ID. `VITE_SYNC_SECRET` có thể prefill Sync
+secret, nhưng vì là `VITE_*` nên nó nằm trong frontend bundle; chỉ dùng cho app cá
+nhân đã khóa truy cập hoặc khi bạn chấp nhận đánh đổi này.
 
-Không đặt các key này thành `VITE_*` khi deploy production.
+Không đặt DashScope/Qwen secret thành `VITE_*` khi deploy production.
 
 ## 3. Build settings
 

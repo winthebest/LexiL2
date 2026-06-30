@@ -4,6 +4,11 @@ const SETTINGS_KEY = 'gre-l2:sync:settings'
 const LAST_PUSH_KEY = 'gre-l2:sync:lastPushAt'
 const LAST_PULL_KEY = 'gre-l2:sync:lastPullAt'
 
+const DEFAULT_SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || ''
+const DEFAULT_SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+const DEFAULT_SYNC_PROFILE_ID = import.meta.env.VITE_SYNC_PROFILE_ID || ''
+const DEFAULT_SYNC_SECRET = import.meta.env.VITE_SYNC_SECRET || ''
+
 let pushTimer = null
 let pushing = false
 
@@ -14,13 +19,20 @@ export function getSyncSettings() {
     return {
       enabled: Boolean(s.enabled),
       autoSync: Boolean(s.autoSync),
-      supabaseUrl: s.supabaseUrl || '',
-      anonKey: s.anonKey || '',
-      profileId: s.profileId || '',
-      syncSecret: s.syncSecret || '',
+      supabaseUrl: s.supabaseUrl || DEFAULT_SUPABASE_URL,
+      anonKey: s.anonKey || DEFAULT_SUPABASE_ANON_KEY,
+      profileId: s.profileId || DEFAULT_SYNC_PROFILE_ID,
+      syncSecret: s.syncSecret || DEFAULT_SYNC_SECRET,
     }
   } catch {
-    return { enabled: false, autoSync: false, supabaseUrl: '', anonKey: '', profileId: '', syncSecret: '' }
+    return {
+      enabled: false,
+      autoSync: false,
+      supabaseUrl: DEFAULT_SUPABASE_URL,
+      anonKey: DEFAULT_SUPABASE_ANON_KEY,
+      profileId: DEFAULT_SYNC_PROFILE_ID,
+      syncSecret: DEFAULT_SYNC_SECRET,
+    }
   }
 }
 
