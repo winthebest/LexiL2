@@ -1,4 +1,4 @@
-import { applySnapshot, makeSnapshot, snapshotStats } from './snapshot.js'
+import { makeSnapshot, mergeSnapshot, snapshotStats } from './snapshot.js'
 
 const SETTINGS_KEY = 'gre-l2:sync:settings'
 const LAST_PUSH_KEY = 'gre-l2:sync:lastPushAt'
@@ -133,7 +133,7 @@ export async function pushSnapshot(settings = getSyncSettings()) {
 export async function pullSnapshot(settings = getSyncSettings()) {
   const remote = await fetchRemoteSnapshot(settings)
   if (!remote?.payload) return { pulled: false, reason: 'Chưa có snapshot trên cloud.' }
-  applySnapshot(remote.payload)
+  mergeSnapshot(remote.payload)
   remember(LAST_PULL_KEY)
   return { pulled: true, updatedAt: remote.updatedAt, stats: snapshotStats(remote.payload) }
 }
@@ -148,7 +148,7 @@ export async function pullIfRemoteNewer(settings = getSyncSettings()) {
   if (localKnown && Date.parse(remote.updatedAt) <= Date.parse(localKnown)) {
     return { pulled: false, reason: 'Local đã mới nhất.' }
   }
-  applySnapshot(remote.payload)
+  mergeSnapshot(remote.payload)
   remember(LAST_PULL_KEY)
   return { pulled: true, updatedAt: remote.updatedAt, stats: snapshotStats(remote.payload) }
 }

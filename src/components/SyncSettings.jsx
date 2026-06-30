@@ -73,15 +73,12 @@ export default function SyncSettings() {
   }
 
   async function doPull() {
-    if (!window.confirm('Kéo dữ liệu cloud sẽ ghi đè dữ liệu GRE L2 trên thiết bị này. Tiếp tục?')) {
-      return
-    }
     setBusy(true)
     setStatus('')
     try {
       saveSyncSettings(settings)
       const r = await pullSnapshot(settings)
-      setStatus(r.pulled ? `Đã kéo snapshot cloud: ${r.stats.keys} mục.` : r.reason)
+      setStatus(r.pulled ? `Đã gộp dữ liệu cloud: ${r.stats.keys} mục.` : r.reason)
       setMeta(getSyncMeta())
       if (r.pulled) window.location.reload()
     } catch (e) {
@@ -209,6 +206,11 @@ export default function SyncSettings() {
             Kéo về
           </button>
         </div>
+
+        <p className="mt-3 text-[12px] leading-relaxed text-muted">
+          Kéo về sẽ gộp dữ liệu cloud với dữ liệu đang có trên thiết bị này, không xóa
+          các từ chỉ có ở máy hiện tại.
+        </p>
 
         <div className="mt-4 rounded-2xl border border-rule bg-canvas p-4 text-[13px] text-muted">
           <p>Local: {meta.local.keys} mục · {meta.local.cards} thẻ · {fmtBytes(meta.local.bytes)}</p>
