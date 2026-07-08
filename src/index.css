@@ -5,57 +5,57 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* =========================================================================
-   Hệ token — hướng "SaaS năng lượng": nền sáng, gradient indigo→violet,
-   chữ to & đậm, bo tròn lớn, bóng mềm ánh tím.
+   Hệ token — Editorial dark: nền tối trầm ấm, accent hổ phách/cam đất,
+   serif hiện đại cho từ vựng, sans tiếng Việt sạch cho nội dung/UI.
    ========================================================================= */
 @theme {
   /* Font */
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-display: "Space Grotesk", "Plus Jakarta Sans", ui-sans-serif, sans-serif;
+  --font-sans: "Be Vietnam Pro", "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Noto Serif", Georgia, "Times New Roman", ui-serif, serif;
   --font-ipa: "Gentium Plus", "Charis SIL", "Doulos SIL", "Times New Roman", serif;
   --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 
-  /* Màu — light */
-  --color-ink: #1b1830; /* chữ chính — indigo-đen */
-  --color-muted: #6f6b85; /* chữ phụ */
-  --color-canvas: #fbfbfe; /* nền trang */
-  --color-surface: #ffffff; /* mặt thẻ */
-  --color-rule: #ecebf5; /* viền / divider — lavender nhạt */
-  --color-accent: #6366f1; /* indigo */
-  --color-accent2: #a855f7; /* violet — đầu kia của gradient */
-  --color-accent-soft: #eef0fe; /* nền nhạt accent */
+  /* Màu — light: calm editorial */
+  --color-ink: #2d2923;
+  --color-muted: #746e64;
+  --color-canvas: #f7f2e8;
+  --color-surface: #fffaf0;
+  --color-rule: #e3d8c7;
+  --color-accent: #8f5f22;
+  --color-accent2: #b7792e;
+  --color-accent-soft: #f3e3c7;
 
   /* Màu ngữ nghĩa — CÓ CHỨC NĂNG, luôn kèm chữ (a11y) */
-  --color-pos: #10b981; /* emerald */
-  --color-neg: #f43f5e; /* rose */
-  --color-neu: #8b87a0;
-  --color-ok: #10b981;
-  --color-miss: #f43f5e;
+  --color-pos: #4f8b68;
+  --color-neg: #c26a5a;
+  --color-neu: #8b8275;
+  --color-ok: #4f8b68;
+  --color-miss: #c26a5a;
 
-  --radius-card: 22px;
+  --radius-card: 20px;
 
-  --shadow-soft: 0 18px 40px -20px rgba(99, 102, 241, 0.45);
-  --shadow-card: 0 8px 30px -18px rgba(27, 24, 48, 0.25);
+  --shadow-soft: 0 18px 38px -24px rgba(63, 40, 18, 0.42);
+  --shadow-card: 0 12px 34px -26px rgba(63, 40, 18, 0.34);
 }
 
-/* Dark mode — nền tím-đen sâu, accent sáng hơn, giữ ý nghĩa màu ngữ nghĩa. */
+/* Dark mode — mặc định Editorial dark. */
 [data-theme="dark"] {
-  --color-ink: #f2f0fb;
-  --color-muted: #a8a3c2;
-  --color-canvas: #131121;
-  --color-surface: #1d1a30;
-  --color-rule: #2e2a45;
-  --color-accent: #818cf8;
-  --color-accent2: #c084fc;
-  --color-accent-soft: #272348;
-  --color-pos: #34d399;
-  --color-neg: #fb7185;
-  --color-neu: #a8a3c2;
-  --color-ok: #34d399;
-  --color-miss: #fb7185;
+  --color-ink: #f6ead8;
+  --color-muted: #b9a894;
+  --color-canvas: #18130f;
+  --color-surface: #221a14;
+  --color-rule: #3b2e23;
+  --color-accent: #d69a46;
+  --color-accent2: #b9702d;
+  --color-accent-soft: #352719;
+  --color-pos: #8fbd8f;
+  --color-neg: #e08976;
+  --color-neu: #b9a894;
+  --color-ok: #8fbd8f;
+  --color-miss: #e08976;
 
-  --shadow-soft: 0 18px 44px -18px rgba(129, 140, 248, 0.4);
-  --shadow-card: 0 10px 34px -20px rgba(0, 0, 0, 0.6);
+  --shadow-soft: 0 20px 46px -24px rgba(0, 0, 0, 0.72);
+  --shadow-card: 0 16px 42px -26px rgba(0, 0, 0, 0.64);
 }
 
 @layer base {
@@ -65,10 +65,21 @@
   body {
     margin: 0;
     font-family: var(--font-sans);
+    font-weight: 400;
     background: var(--color-canvas);
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 50% -10%, color-mix(in srgb, var(--color-accent) 16%, transparent) 0, transparent 36rem),
+      linear-gradient(180deg, color-mix(in srgb, var(--color-surface) 28%, transparent), transparent 22rem);
+    opacity: 0.55;
   }
   ::selection {
     background: var(--color-accent-soft);
@@ -77,6 +88,12 @@
     font-family: var(--font-ipa);
     font-feature-settings: normal;
   }
+  button,
+  input,
+  select,
+  textarea {
+    font-family: var(--font-sans);
+  }
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
@@ -84,24 +101,13 @@
 }
 
 @layer utilities {
-  /* Gradient nền indigo → violet (nút primary, dải nhấn). */
+  /* Giữ tên cũ để không phải đổi hàng loạt component; visual mới là xanh xám dịu. */
   .bg-grad {
-    background-image: linear-gradient(
-      135deg,
-      var(--color-accent) 0%,
-      var(--color-accent2) 100%
-    );
+    background-image: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent2) 100%);
   }
-  /* Gradient cho chữ (headword, số liệu lớn). */
+  /* Text nhấn theo mockup: không rực, không gradient tím. */
   .text-grad {
-    background-image: linear-gradient(
-      120deg,
-      var(--color-accent) 0%,
-      var(--color-accent2) 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    color: var(--color-ink);
   }
   .shadow-soft {
     box-shadow: var(--shadow-soft);

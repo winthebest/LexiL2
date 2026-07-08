@@ -60,7 +60,7 @@ export default function ClusterDrill() {
 
   if (queue.length === 0) {
     return (
-      <p className="text-center text-slate-400">
+      <p className="text-center text-muted">
         Chưa có cụm đồng nghĩa nào để luyện. Lưu vài từ có “cụm đồng nghĩa” (vd
         loquacious, terse, candid) rồi quay lại.
       </p>
@@ -70,19 +70,19 @@ export default function ClusterDrill() {
   if (done) {
     const pct = queue.length ? Math.round((stats.correct / queue.length) * 100) : 0
     return (
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 text-center">
+      <div className="rounded-card border border-rule bg-surface p-6 text-center shadow-card">
         <p className="text-lg font-semibold">Xong drill sắc thái 🎯</p>
-        <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+        <p className="mt-2 font-display text-4xl font-semibold text-ink">
           {stats.correct}/{queue.length}
         </p>
-        <p className="text-sm text-slate-500">đúng ({pct}%)</p>
+        <p className="text-sm text-muted">đúng ({pct}%)</p>
         <button
           onClick={() => {
             setIdx(0)
             setPicked(null)
             setStats({ correct: 0, wrong: 0 })
           }}
-          className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
+          className="mt-4 rounded-full bg-grad px-4 py-2 font-medium text-white hover:opacity-95"
         >
           Làm lại (xáo trộn)
         </button>
@@ -107,19 +107,19 @@ export default function ClusterDrill() {
 
   return (
     <div>
-      <div className="mb-3 flex items-center justify-between text-sm text-slate-500">
+      <div className="mb-3 flex items-center justify-between text-sm text-muted">
         <span>Câu {idx + 1}/{queue.length}</span>
         <span>✅ {stats.correct} · ❌ {stats.wrong}</span>
       </div>
-      <div className="mb-4 h-1.5 w-full overflow-hidden rounded bg-slate-200 dark:bg-slate-700">
-        <div className="h-full bg-indigo-500 transition-all" style={{ width: `${(idx / queue.length) * 100}%` }} />
+      <div className="mb-4 h-1.5 w-full overflow-hidden rounded bg-rule">
+        <div className="h-full bg-accent transition-all" style={{ width: `${(idx / queue.length) * 100}%` }} />
       </div>
 
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
-        <p className="text-sm text-slate-400">Cụm: {q.theme || '(không tên)'}</p>
+      <div className="rounded-card border border-rule bg-surface p-5 shadow-card">
+        <p className="text-sm text-muted">Cụm: {q.theme || '(không tên)'}</p>
         <p className="mt-1 text-lg">
           Sắc thái nào đúng với{' '}
-          <span className="font-bold text-indigo-600 dark:text-indigo-400">{q.target.word}</span>?
+          <span className="font-bold text-accent">{q.target.word}</span>?
         </p>
 
         <ul className="mt-4 space-y-2">
@@ -127,11 +127,11 @@ export default function ClusterDrill() {
             const isTarget = m.word === q.target.word
             const isPicked = picked === m.word
             let cls =
-              'border-slate-200 dark:border-slate-700 hover:border-indigo-400'
+              'border-rule hover:border-accent'
             if (picked) {
               if (isTarget) cls = 'border-green-400 bg-green-50 dark:bg-green-950/40'
               else if (isPicked) cls = 'border-red-400 bg-red-50 dark:bg-red-950/40'
-              else cls = 'border-slate-200 dark:border-slate-700 opacity-60'
+              else cls = 'border-rule opacity-60'
             }
             return (
               <li key={m.word}>
@@ -156,7 +156,7 @@ export default function ClusterDrill() {
         {picked && (
           <button
             onClick={next}
-            className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
+                  className="mt-4 rounded-full bg-grad px-4 py-2 font-medium text-white hover:opacity-95"
           >
             Tiếp →
           </button>

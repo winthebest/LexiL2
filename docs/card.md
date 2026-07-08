@@ -15,6 +15,7 @@
 │   ▸ Gốc từ + họ từ    ← gập                    │
 │   ▸ Mnemonic tiếng Việt                       │
 │   ▸ Ví dụ                                      │
+│   ▸ Collocations (bảng cụm tự nhiên)           │
 │   ▸ Cụm đồng nghĩa (bảng sắc thái)            │
 │   ▸ Nghĩa bẫy / nghĩa phụ                      │
 │   ▸ Trái nghĩa                                 │
@@ -42,7 +43,7 @@ Nguyên tắc chống quá tải (pain #5): chỉ "Nghĩa (B1)" mở sẵn; còn
   - `negative` → ⚠ tiêu cực
   - `neutral`  → • trung tính
 
-## 4. Bảy mục gập/mở (dùng `<details>`)
+## 4. Tám mục gập/mở (dùng `<details>`)
 
 ### 4.1 Nghĩa (B1) — `open` mặc định
 - `core_meaning_en` (chính, to)
@@ -62,16 +63,23 @@ Nguyên tắc chống quá tải (pain #5): chỉ "Nghĩa (B1)" mở sẵn; còn
 ### 4.4 Ví dụ
 - `examples[]`: câu (đậm/nghiêng phần từ nếu dễ) + dòng `why` (xám, "vì sao câu này").
 
-### 4.5 Cụm đồng nghĩa — **ẩn nếu `synonym_cluster === null`**
+### 4.5 Collocations — **ẩn nếu `collocations` rỗng**
+- `collocations[]`: các cụm tự nhiên, không phải câu đầy đủ.
+- Desktop/tablet: bảng cột **Cụm | Kiểu | Nghĩa | Ví dụ**.
+- Mobile: mỗi cụm thành một khối nhỏ để tránh ép chữ.
+- `phrase` in đậm; target word trong `phrase`/`example` được highlight nhẹ.
+- `note` hiển thị nhỏ dưới ví dụ.
+
+### 4.6 Cụm đồng nghĩa — **ẩn nếu `synonym_cluster === null`**
 - Tiêu đề: `theme_vi`.
 - Bảng `members[]`, cột: **Từ | Mức (intensity) | Register | Ghi chú (note)**.
 - Sắp theo `intensity` tăng dần. Tô đậm dòng có `word === card.word`.
 - intensity render thành thanh/chấm 1–5 cho dễ liếc.
 
-### 4.6 Nghĩa bẫy / phụ — **ẩn nếu `tricky_senses` rỗng**
+### 4.7 Nghĩa bẫy / phụ — **ẩn nếu `tricky_senses` rỗng**
 - Mỗi item: `sense_en` (nghĩa), `example` (ví dụ), `trap` (⚠ cảnh báo bẫy GRE).
 
-### 4.7 Trái nghĩa
+### 4.8 Trái nghĩa
 - `antonyms[]` render thành các chip.
 
 ## 5. Trạng thái UI
@@ -97,6 +105,7 @@ App
       ├─ EtymologySection
       ├─ MnemonicSection
       ├─ ExamplesSection
+      ├─ CollocationsSection
       ├─ SynonymClusterSection (nullable)
       ├─ TrickySensesSection (nullable)
       └─ AntonymsSection

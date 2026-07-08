@@ -25,14 +25,14 @@ const CONFIDENCE_LABEL = {
 function Section({ title, caption, children, open = false }) {
   return (
     <details open={open} className="group border-t border-rule">
-      <summary className="flex cursor-pointer list-none select-none items-center gap-2.5 py-3.5 marker:hidden">
-        <span className="grid h-6 w-6 place-items-center rounded-full bg-accent-soft text-accent transition-transform group-open:rotate-90">
+      <summary className="flex cursor-pointer list-none select-none items-center gap-2.5 py-4 marker:hidden">
+        <span className="grid h-6 w-6 place-items-center rounded-full bg-canvas text-muted transition-transform group-open:rotate-90">
           <ChevronIcon className="h-3.5 w-3.5" />
         </span>
-        <span className="text-[16px] font-bold text-ink">{title}</span>
+        <span className="font-display text-[18px] font-medium text-ink">{title}</span>
         {caption && <Caption>{caption}</Caption>}
       </summary>
-      <div className="pb-4 pl-9 text-[15px] leading-[1.65] text-ink">{children}</div>
+      <div className="pb-5 pl-9 text-[15px] leading-[1.75] text-ink">{children}</div>
     </details>
   )
 }
@@ -49,10 +49,91 @@ function AudioButton({ word }) {
       }}
       aria-label={`Phát âm ${word}`}
       title="Phát âm (Space)"
-      className="grid h-9 w-9 place-items-center rounded-full bg-accent-soft text-accent transition hover:bg-grad hover:text-white"
+      className="grid h-10 w-10 place-items-center rounded-full bg-canvas text-accent transition hover:bg-accent-soft"
     >
       <SpeakerIcon playing={playing} />
     </button>
+  )
+}
+
+function HighlightWord({ text, word }) {
+  if (!text || !word) return text || null
+  const safeWord = String(word).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+  const parts = String(text).split(new RegExp(`(${safeWord})`, 'i'))
+  return parts.map((part, i) =>
+    part.toLowerCase() === word.toLowerCase() ? (
+      <mark key={i} className="rounded bg-accent-soft px-0.5 font-semibold text-accent">
+        {part}
+      </mark>
+    ) : (
+      <span key={i}>{part}</span>
+    ),
+  )
+}
+
+function CollocationsTable({ items, word }) {
+  if (!items?.length) return null
+
+  return (
+    <div className="space-y-3">
+      <div className="hidden overflow-hidden rounded-xl border border-rule sm:block">
+        <table className="w-full border-collapse text-left text-[14px]">
+          <thead className="bg-canvas text-[12px] uppercase tracking-[0.08em] text-muted">
+            <tr>
+              <th className="w-[25%] px-3 py-2 font-bold">Cụm</th>
+              <th className="w-[18%] px-3 py-2 font-bold">Kiểu</th>
+              <th className="w-[22%] px-3 py-2 font-bold">Nghĩa</th>
+              <th className="px-3 py-2 font-bold">Ví dụ</th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((c, i) => (
+              <tr key={`${c.phrase || 'collocation'}-${i}`} className="border-t border-rule align-top">
+                <td className="px-3 py-3 font-display font-bold text-ink">
+                  <HighlightWord text={c.phrase} word={word} />
+                  {c.register && <Caption className="mt-1 block normal-case tracking-normal">{c.register}</Caption>}
+                </td>
+                <td className="px-3 py-3 font-data text-[12px] text-accent">{c.pattern}</td>
+                <td className="px-3 py-3 text-muted">{c.vi}</td>
+                <td className="px-3 py-3">
+                  {c.example && (
+                    <p className="text-[14px] italic text-ink">
+                      “<HighlightWord text={c.example} word={word} />”
+                    </p>
+                  )}
+                  {c.note && <p className="mt-1 text-[13px] text-muted">{c.note}</p>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ul className="space-y-2.5 sm:hidden">
+        {items.map((c, i) => (
+          <li key={`${c.phrase || 'collocation'}-${i}`} className="rounded-xl bg-canvas p-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <p className="font-display text-[15px] font-bold text-ink">
+                <HighlightWord text={c.phrase} word={word} />
+              </p>
+              {c.pattern && (
+                <span className="rounded-full bg-accent-soft px-2 py-0.5 font-data text-[11px] font-semibold text-accent">
+                  {c.pattern}
+                </span>
+              )}
+              {c.register && <Caption>{c.register}</Caption>}
+            </div>
+            {c.vi && <p className="mt-1 text-[14px] text-muted">{c.vi}</p>}
+            {c.example && (
+              <p className="mt-2 text-[14px] italic text-ink">
+                “<HighlightWord text={c.example} word={word} />”
+              </p>
+            )}
+            {c.note && <p className="mt-1 text-[13px] text-muted">{c.note}</p>}
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
@@ -71,6 +152,7 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
     word_family = [],
     mnemonic_vi,
     examples = [],
+    collocations = [],
     synonym_cluster,
     tricky_senses = [],
     antonyms = [],
@@ -81,32 +163,27 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
 
   return (
     <article className="overflow-hidden rounded-card border border-rule bg-surface shadow-card">
-      {/* Dải gradient mảnh trên đỉnh thẻ */}
-      <div className="h-1.5 w-full bg-grad" />
-
       <div className="p-6 sm:p-7">
         {/* ── Đầu thẻ ── */}
-        <header className="flex flex-wrap items-center gap-x-3 gap-y-2">
-          <h2 className="font-display text-[40px] font-bold leading-none tracking-tight text-grad">
-            {word}
-          </h2>
-          {ipa && <span className="ipa text-[17px] text-muted">{ipa}</span>}
-          <AudioButton word={word} />
-          <a
-            href={youglishUrl(word)}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1 rounded-full border border-rule px-3 py-1 text-[13px] font-semibold text-accent hover:bg-accent-soft"
-          >
-            <ExternalIcon className="h-3.5 w-3.5" /> Youglish
-          </a>
-
-          <div className="ml-auto flex items-center gap-3">
-            {typeof difficulty === 'number' && (
-              <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-bold text-accent">
-                khó {difficulty}/5
-              </span>
-            )}
+        <header>
+          <div className="flex items-center gap-3">
+            <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-canvas text-ink">
+              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden="true">
+                <path d="M5 5.5h5.5A2.5 2.5 0 0 1 13 8v11a2.5 2.5 0 0 0-2.5-2.5H5v-11Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+                <path d="M19 5.5h-5.5A2.5 2.5 0 0 0 11 8v11a2.5 2.5 0 0 1 2.5-2.5H19v-11Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="font-display text-[21px] font-medium text-ink">Word Card</p>
+              <div className="mt-1 flex flex-wrap items-center gap-2">
+                {typeof difficulty === 'number' && (
+                  <span className="rounded-full bg-accent-soft px-2.5 py-1 text-[12px] font-semibold text-accent">
+                    khó {difficulty}/5
+                  </span>
+                )}
+                {fromCache && <Caption>cache</Caption>}
+              </div>
+            </div>
             {onToggleSave && (
               <button
                 type="button"
@@ -114,13 +191,33 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
                 aria-pressed={saved}
                 aria-label={saved ? 'Bỏ lưu từ' : 'Lưu vào bảng từ'}
                 title={saved ? 'Bỏ lưu' : 'Lưu vào bảng từ'}
-                className={`grid h-9 w-9 place-items-center rounded-full transition ${
-                  saved ? 'bg-grad text-white shadow-soft' : 'bg-accent-soft text-accent hover:bg-grad hover:text-white'
+                className={`grid h-11 w-11 shrink-0 place-items-center rounded-full border transition ${
+                  saved
+                    ? 'border-accent bg-accent-soft text-accent'
+                    : 'border-rule bg-surface text-ink hover:bg-canvas'
                 }`}
               >
                 <BookmarkIcon filled={saved} />
               </button>
             )}
+          </div>
+
+          <div className="mt-8">
+            <h2 className="break-words font-display text-[54px] font-bold leading-[0.98] tracking-normal text-ink sm:text-[68px]">
+              {word}
+            </h2>
+            <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
+              <AudioButton word={word} />
+              {ipa && <span className="ipa text-[22px] text-muted">{ipa}</span>}
+              <a
+                href={youglishUrl(word)}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-9 items-center gap-1 rounded-full border border-rule px-3 py-1 text-[13px] font-semibold text-muted hover:bg-canvas hover:text-accent"
+              >
+                <ExternalIcon className="h-3.5 w-3.5" /> Youglish
+              </a>
+            </div>
           </div>
         </header>
 
@@ -129,23 +226,22 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
         )}
 
         {/* Hàng nhãn */}
-        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-2">
+        <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 border-t border-rule pt-4">
           {part_of_speech.length > 0 && (
-            <span className="font-display text-[14px] font-medium italic text-muted">
+            <span className="font-display text-[16px] font-medium italic text-muted">
               {part_of_speech.join(', ')}
             </span>
           )}
           <RegisterChip value={register} />
           {connotation && <ConnotationDot value={connotation} />}
-          {fromCache && <Caption className="ml-auto">cache</Caption>}
         </div>
 
-        <div className="mt-4">
+        <div className="mt-2">
           {/* ── Nghĩa (B1) — luôn mở ── */}
           <Section title="Nghĩa" caption="B1" open>
-            <p className="font-display text-[20px] font-medium text-ink">{core_meaning_en}</p>
+            <p className="text-[18px] leading-[1.75] text-ink">{core_meaning_en}</p>
             {vi_anchor && (
-              <p className="mt-1.5 text-[16px] font-medium text-muted">
+              <p className="mt-2 text-[16px] font-medium text-muted">
                 <span className="font-data text-[11px]">vi</span> · {vi_anchor}
               </p>
             )}
@@ -207,7 +303,7 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
               {mnemonic_vi.keyword && (
                 <p>
                   <span className="text-muted">Móc câu: </span>
-                  <span className="font-display text-[18px] font-bold text-grad">
+                  <span className="font-display text-[18px] font-medium text-ink">
                     {mnemonic_vi.keyword}
                   </span>
                 </p>
@@ -222,11 +318,18 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
               <ul className="space-y-3">
                 {examples.map((e, i) => (
                   <li key={i} className="rounded-xl bg-canvas p-3">
-                    <p className="font-display text-[15px] italic text-ink">“{e.sentence}”</p>
+                    <p className="text-[15px] italic text-ink">“{e.sentence}”</p>
                     {e.why && <p className="mt-1 text-[14px] text-muted">↳ {e.why}</p>}
                   </li>
                 ))}
               </ul>
+            </Section>
+          )}
+
+          {/* ── Collocations ── */}
+          {collocations.length > 0 && (
+            <Section title="Collocations" caption="cụm tự nhiên" open={mode === 'encode'}>
+              <CollocationsTable items={collocations} word={word} />
             </Section>
           )}
 
@@ -245,7 +348,7 @@ export default function WordCard({ data, fromCache, saved, onToggleSave, mode = 
                   <li key={i}>
                     <p className="font-display font-semibold text-ink">{t.sense_en}</p>
                     {t.example && (
-                      <p className="font-display text-[14px] italic text-muted">“{t.example}”</p>
+                      <p className="text-[14px] italic text-muted">“{t.example}”</p>
                     )}
                     {t.trap && (
                       <p className="mt-1 text-[14px] font-medium" style={{ color: 'var(--color-neg)' }}>

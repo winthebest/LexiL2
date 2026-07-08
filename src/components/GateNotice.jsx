@@ -9,9 +9,9 @@ import { useState } from 'react'
 function Bar({ have, need }) {
   const pct = Math.min(100, Math.round((have / need) * 100))
   return (
-    <div className="h-1.5 w-full overflow-hidden rounded bg-slate-200 dark:bg-slate-700">
+    <div className="h-1.5 w-full overflow-hidden rounded bg-rule">
       <div
-        className={`h-full transition-all ${have >= need ? 'bg-green-500' : 'bg-indigo-500'}`}
+        className={`h-full transition-all ${have >= need ? 'bg-[var(--color-ok)]' : 'bg-accent'}`}
         style={{ width: `${pct}%` }}
       />
     </div>
@@ -41,7 +41,7 @@ export default function GateNotice({ gate, children }) {
   }
 
   return (
-    <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6">
+    <div className="rounded-card border border-rule bg-surface p-6 shadow-card">
       <p className="text-lg font-semibold">🔒 {gate.label} — chưa mở khóa</p>
       {gate.why && <p className="mt-1 text-sm text-slate-500">{gate.why}</p>}
 

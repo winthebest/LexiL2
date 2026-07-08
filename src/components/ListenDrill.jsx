@@ -52,7 +52,7 @@ export default function ListenDrill() {
 
   if (total === 0) {
     return (
-      <p className="text-center text-slate-400">
+      <p className="text-center text-muted">
         Chưa có từ để nghe. Lưu vài từ (bấm ☆ trên thẻ) rồi quay lại đây.
       </p>
     )
@@ -60,15 +60,15 @@ export default function ListenDrill() {
 
   if (done) {
     return (
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 text-center">
+      <div className="rounded-card border border-rule bg-surface p-6 text-center shadow-card">
         <p className="text-lg font-semibold">Xong drill nghe 🎧</p>
-        <p className="mt-2 text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+        <p className="mt-2 font-display text-4xl font-semibold text-ink">
           {stats.known}/{total}
         </p>
-        <p className="text-sm text-slate-500">nhớ được ({summary}%)</p>
+        <p className="text-sm text-muted">nhớ được ({summary}%)</p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-4 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
+          className="mt-4 rounded-full bg-grad px-4 py-2 font-medium text-white hover:opacity-95"
         >
           Làm lại
         </button>
@@ -78,12 +78,12 @@ export default function ListenDrill() {
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between text-sm text-slate-500">
+      <div className="mb-4 flex items-center justify-between text-sm text-muted">
         <span>Câu {idx + 1}/{total}</span>
         <span>🙂 {stats.known} · 🤔 {stats.unknown}</span>
       </div>
 
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 text-center">
+      <div className="rounded-card border border-rule bg-surface p-6 text-center shadow-card">
         <button
           onClick={() => say(card.word)}
           aria-label="Nghe lại"
@@ -91,21 +91,21 @@ export default function ListenDrill() {
         >
           🔊
         </button>
-        <p className="mt-2 text-sm text-slate-400">Nghe và đoán nghĩa…</p>
+        <p className="mt-2 text-sm text-muted">Nghe và đoán nghĩa…</p>
 
         {!revealed ? (
           <button
             onClick={() => setRevealed(true)}
-            className="mt-5 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700"
+            className="mt-5 rounded-full bg-grad px-4 py-2 font-medium text-white hover:opacity-95"
           >
             Hiện đáp án
           </button>
         ) : (
           <div className="mt-5">
-            <p className="text-xl font-bold text-slate-900 dark:text-white">{card.word}</p>
-            {card.ipa && <p className="font-mono text-sm text-slate-500">{card.ipa}</p>}
-            <p className="mt-2 text-slate-700 dark:text-slate-200">{card.core_meaning_en}</p>
-            {card.vi_anchor && <p className="text-sm text-slate-500">→ {card.vi_anchor}</p>}
+            <p className="font-display text-2xl font-semibold text-ink">{card.word}</p>
+            {card.ipa && <p className="font-mono text-sm text-muted">{card.ipa}</p>}
+            <p className="mt-2 text-ink">{card.core_meaning_en}</p>
+            {card.vi_anchor && <p className="text-sm text-muted">→ {card.vi_anchor}</p>}
 
             <div className="mt-5 flex justify-center gap-3">
               <button

@@ -51,7 +51,7 @@ export default function QuestionBank() {
 
   if (all.length === 0) {
     return (
-      <p className="text-center text-slate-400">
+      <p className="text-center text-muted">
         Chưa có từ nào đủ dữ liệu. Lưu vài từ (bấm ☆ trên thẻ) rồi quay lại.
       </p>
     )
@@ -143,7 +143,7 @@ export default function QuestionBank() {
 
   return (
     <div>
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-muted">
         Test khả năng <b>dùng</b> từ trong ngữ cảnh (TC 1 chỗ trống) — sinh rồi
         <b> kiểm chứng độc lập</b> để câu chỉ có đúng một đáp án.
       </p>
@@ -157,7 +157,7 @@ export default function QuestionBank() {
             reset()
             setStatus('idle')
           }}
-          className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-2 py-1.5 text-sm"
+          className="rounded-lg border border-rule bg-surface px-2 py-1.5 text-sm text-ink"
         >
           {all.map((c) => (
             <option key={c.word} value={c.word}>
@@ -165,18 +165,18 @@ export default function QuestionBank() {
             </option>
           ))}
         </select>
-        <span className="text-xs text-slate-400">trong bank: {inBank} câu</span>
+        <span className="text-xs text-muted">trong bank: {inBank} câu</span>
         <button
           onClick={inBank > 0 ? serveUnseen : makeNew}
           disabled={status === 'working'}
-          className="ml-auto rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+          className="ml-auto rounded-full bg-grad px-4 py-2 text-sm font-medium text-white hover:opacity-95 disabled:opacity-50"
         >
           {status === 'working' ? 'Đang dựng…' : inBank > 0 ? 'Câu chưa gặp' : 'Tạo câu (generate→verify)'}
         </button>
         <button
           onClick={makeNew}
           disabled={status === 'working'}
-          className="rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-2 text-sm hover:bg-slate-100 dark:hover:bg-slate-700 disabled:opacity-50"
+          className="rounded-full border border-rule px-3 py-2 text-sm text-ink hover:bg-canvas disabled:opacity-50"
         >
           Tạo câu mới
         </button>
@@ -184,12 +184,12 @@ export default function QuestionBank() {
 
       {/* Trạng thái dựng */}
       {status === 'working' && (
-        <div className="mt-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
-          <div className="flex items-center gap-3 text-slate-500">
-            <span className="h-2 w-2 animate-ping rounded-full bg-indigo-500" />
+        <div className="mt-5 rounded-card border border-rule bg-surface p-5 shadow-card">
+          <div className="flex items-center gap-3 text-muted">
+            <span className="h-2 w-2 animate-ping rounded-full bg-accent" />
             {step || 'Đang dựng câu…'}
           </div>
-          <p className="mt-2 text-xs text-slate-400">
+          <p className="mt-2 text-xs text-muted">
             generator (qwen3.7-plus) → verifier (qwen3.7-max, context sạch). Có thể sinh lại tối đa 3 lần.
           </p>
         </div>
@@ -214,13 +214,13 @@ export default function QuestionBank() {
 
       {/* Câu hỏi */}
       {status === 'ready' && q && (
-        <div className="mt-5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
-          <p className="text-lg leading-relaxed text-slate-800 dark:text-slate-100">
+        <div className="mt-5 rounded-card border border-rule bg-surface p-5 shadow-card">
+          <p className="text-lg leading-relaxed text-ink">
             {q.sentence.split('____').map((seg, i, arr) => (
               <span key={i}>
                 {seg}
                 {i < arr.length - 1 && (
-                  <span className="mx-1 inline-block min-w-16 border-b-2 border-indigo-400 text-center align-baseline">
+                  <span className="mx-1 inline-block min-w-16 border-b-2 border-accent text-center align-baseline">
                     {answered ? q.options.find((o) => o.id === q.intended_answer)?.word : '____'}
                   </span>
                 )}
@@ -232,11 +232,11 @@ export default function QuestionBank() {
             {q.options.map((o) => {
               const isKey = o.id === q.intended_answer
               const isPicked = picked === o.id
-              let cls = 'border-slate-200 dark:border-slate-700 hover:border-indigo-400'
+              let cls = 'border-rule hover:border-accent'
               if (answered) {
                 if (isKey) cls = 'border-green-400 bg-green-50 dark:bg-green-950/40'
                 else if (isPicked) cls = 'border-red-400 bg-red-50 dark:bg-red-950/40'
-                else cls = 'border-slate-200 dark:border-slate-700 opacity-60'
+                else cls = 'border-rule opacity-60'
               }
               return (
                 <li key={o.id}>
@@ -245,7 +245,7 @@ export default function QuestionBank() {
                     disabled={answered}
                     className={`w-full rounded-lg border px-3 py-2 text-left ${cls}`}
                   >
-                    <span className="mr-2 font-mono text-sm text-slate-400">{o.id}</span>
+                    <span className="mr-2 font-mono text-sm text-muted">{o.id}</span>
                     {o.word}
                   </button>
                 </li>
@@ -267,24 +267,24 @@ export default function QuestionBank() {
                   : `❌ Đáp án đúng: ${q.intended_answer} (${q.options.find((o) => o.id === q.intended_answer)?.word}). Từ này sẽ nổi lại ở hàng ôn.`}
               </p>
               {q.rationale && (
-                <p className="mt-1 text-sm text-slate-500">Vì sao: {q.rationale}</p>
+                <p className="mt-1 text-sm text-muted">Vì sao: {q.rationale}</p>
               )}
 
               {/* Phản hồi chất lượng (Mục 10.10) */}
-              <p className="mt-4 text-xs text-slate-400">Câu này có vấn đề? (lọc khỏi bank + chỉnh prompt)</p>
+              <p className="mt-4 text-xs text-muted">Câu này có vấn đề? (lọc khỏi bank + chỉnh prompt)</p>
               <div className="mt-1 flex flex-wrap gap-2">
                 {FLAGS.map(([code, label]) => (
                   <button
                     key={code}
                     onClick={() => flag(code)}
-                    className="rounded-full border border-slate-300 dark:border-slate-600 px-3 py-1 text-xs text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
+                    className="rounded-full border border-rule px-3 py-1 text-xs text-muted hover:bg-canvas"
                   >
                     {label}
                   </button>
                 ))}
                 <button
                   onClick={serveUnseen}
-                  className="ml-auto rounded-lg bg-indigo-600 px-3 py-1.5 text-sm text-white hover:bg-indigo-700"
+                  className="ml-auto rounded-full bg-grad px-3 py-1.5 text-sm text-white hover:opacity-95"
                 >
                   Câu tiếp →
                 </button>

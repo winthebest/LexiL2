@@ -64,7 +64,7 @@ export default function PassageMaker() {
 
   if (saved.length === 0) {
     return (
-      <p className="text-center text-slate-400">
+      <p className="text-center text-muted">
         Chưa có từ nào. Lưu vài từ (bấm ☆ trên thẻ) rồi quay lại đây.
       </p>
     )
@@ -72,7 +72,7 @@ export default function PassageMaker() {
 
   return (
     <div>
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-muted">
         Chọn từ (≥2) để AI viết một đoạn văn ngắn nhồi đủ các từ đó — củng cố từ hiếm trong ngữ cảnh.
       </p>
 
@@ -85,8 +85,8 @@ export default function PassageMaker() {
               onClick={() => toggle(e.word)}
               className={`rounded-full border px-3 py-1 text-sm ${
                 on
-                  ? 'border-indigo-500 bg-indigo-600 text-white'
-                  : 'border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-300'
+                  ? 'border-accent bg-accent-soft text-accent'
+                  : 'border-rule bg-surface text-muted'
               }`}
             >
               {e.display || e.word}
@@ -97,21 +97,21 @@ export default function PassageMaker() {
       </div>
 
       <div className="mt-4 flex items-center gap-3">
-        <label className="text-sm text-slate-500">Trình độ:</label>
+        <label className="text-sm text-muted">Trình độ:</label>
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value)}
-          className="rounded-lg border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-2 py-1 text-sm"
+          className="rounded-lg border border-rule bg-surface px-2 py-1 text-sm"
         >
           <option value="B1">B1</option>
           <option value="B2">B2</option>
           <option value="C1">C1</option>
         </select>
-        <span className="text-sm text-slate-400">đã chọn {selected.size}</span>
+        <span className="text-sm text-muted">đã chọn {selected.size}</span>
         <button
           onClick={run}
           disabled={selected.size < 2 || status === 'loading'}
-          className="ml-auto rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+          className="ml-auto rounded-full bg-grad px-4 py-2 font-medium text-white hover:opacity-95 disabled:opacity-50"
         >
           {status === 'loading' ? 'Đang viết…' : 'Tạo đoạn văn'}
         </button>
@@ -132,24 +132,24 @@ export default function PassageMaker() {
         )}
 
         {status === 'loading' && (
-          <div className="animate-pulse rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
-            <div className="h-5 w-40 rounded bg-slate-200 dark:bg-slate-700" />
+          <div className="animate-pulse rounded-card border border-rule bg-surface p-5 shadow-card">
+            <div className="h-5 w-40 rounded bg-rule" />
             <div className="mt-3 space-y-2">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-4 w-full rounded bg-slate-100 dark:bg-slate-700" />
+                <div key={i} className="h-4 w-full rounded bg-rule" />
               ))}
             </div>
           </div>
         )}
 
         {status === 'success' && result && (
-          <article className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5">
+          <article className="rounded-card border border-rule bg-surface p-5 shadow-card">
             {result.title_vi && (
-              <h3 className="mb-2 font-semibold text-slate-800 dark:text-slate-100">
+              <h3 className="mb-2 font-display text-xl font-semibold text-ink">
                 {result.title_vi}
               </h3>
             )}
-            <p className="leading-relaxed text-slate-700 dark:text-slate-200">
+            <p className="leading-relaxed text-ink">
               {renderPassage(result.passage)}
             </p>
           </article>

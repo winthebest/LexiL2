@@ -1,5 +1,5 @@
 // IntensitySpectrum — phần tử SIGNATURE (phổ "nhẹ → gắt").
-// Track gradient indigo→violet→hồng = thang cường độ; mỗi từ một chấm sắc thái;
+// Track xanh xám → rose dịu = thang cường độ; mỗi từ một chấm sắc thái;
 // từ đang học nhấn bằng viên gradient. Đây là lời giải cho việc bản dịch tiếng
 // Việt làm sụp đổ sắc thái đồng nghĩa.
 
@@ -33,7 +33,7 @@ export default function IntensitySpectrum({ cluster, current }) {
         className="mt-3 h-3 w-full rounded-full"
         style={{
           background:
-            'linear-gradient(90deg, #6366f1 0%, #8b5cf6 45%, #c026d3 75%, #f43f5e 100%)',
+            'linear-gradient(90deg, #9fb6c9 0%, #7f8d99 48%, #b96a6a 100%)',
         }}
         aria-hidden="true"
       />

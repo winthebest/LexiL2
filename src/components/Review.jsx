@@ -226,7 +226,7 @@ export default function Review({ onExit }) {
               autoComplete="off"
               autoCapitalize="off"
               spellCheck={false}
-              className="w-full rounded-2xl border-2 border-rule bg-canvas px-4 py-3.5 font-display text-[20px] text-ink outline-none focus:border-accent"
+              className="w-full rounded-2xl border-2 border-rule bg-canvas px-4 py-3.5 text-[20px] text-ink outline-none focus:border-accent"
             />
             <button
               type="submit"

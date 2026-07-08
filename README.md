@@ -56,9 +56,13 @@ Vite + React + Tailwind v4. LLM: Qwen qua endpoint OpenAI-compatible, JSON mode,
   - ✅ Lịch ôn **SM-2**: tab "Ôn tập" chỉ hiện từ đến hạn; sai → quay lại sau 1 ngày; đúng (Khó/Tốt/Dễ) → giãn khoảng cách.
   - ✅ **Đoạn văn ngữ cảnh**: tab "Đoạn văn" — chọn ≥2 từ → Qwen viết đoạn văn nhồi đủ các từ, tô sáng từ đích.
   - ✅ **Drill nghe**: tab "Drill nghe" — TTS đọc từ → đoán nghĩa → hiện đáp án → tự đánh giá.
+- **v3 (đang mở rộng):**
+  - ✅ **Collocations** trong WordCard: AI sinh 4–7 cụm tự nhiên, ưu tiên academic/formal/GRE khi phù hợp.
+  - ✅ **Cụm từ**: gom collocations từ các từ đã lưu, tìm kiếm/lọc theo pattern, register, từ gốc.
+  - ✅ **Flashcard**: lật thẻ nhanh từ các từ đã lưu, nghe phát âm, tự chấm để cập nhật lịch SRS.
 
 ### Các tab
-`Enricher` (tra từ) · `Từ đã lưu` · `Ôn tập` (SM-2) · `Đoạn văn` · `Drill nghe` · `Đồng bộ`.
+`Enricher` (tra từ) · `Từ đã lưu` · `Flashcard` · `Cụm từ` · `Ôn tập` (SM-2) · `Đoạn văn` · `Drill nghe` · `Đồng bộ`.
 
 ## Đồng bộ laptop ↔ điện thoại
 

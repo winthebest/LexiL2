@@ -30,6 +30,15 @@ function ReviewIcon({ className = 'h-6 w-6' }) {
     </svg>
   )
 }
+function FlashcardIcon({ className = 'h-6 w-6' }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <rect x="5" y="4.5" width="14" height="15" rx="2.5" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M8.5 9h7M8.5 12.5H13" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M16.5 17.5 19 15l-2.5-2.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 function ScaleIcon({ className = 'h-6 w-6' }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
@@ -52,6 +61,15 @@ function BankIcon({ className = 'h-5 w-5' }) {
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
       <rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" strokeWidth="1.6" />
       <path d="M8.5 9h7M8.5 12.5h7M8.5 16h4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  )
+}
+function CollocationIcon({ className = 'h-5 w-5' }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path d="M7 8.5h5.5a3.5 3.5 0 0 1 0 7H11" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M13 8.5h-1.5a3.5 3.5 0 0 0 0 7H17" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+      <path d="M8.5 12h7" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   )
 }
@@ -83,12 +101,14 @@ function SyncIcon({ className = 'h-5 w-5' }) {
 
 const PRIMARY = [
   { id: 'saved', label: 'Bảng từ', Icon: LibraryIcon },
-  { id: 'enricher', label: 'Tra từ', Icon: SearchIcon },
   { id: 'review', label: 'Ôn tập', Icon: ReviewIcon },
-  { id: 'cluster', label: 'Phân biệt', Icon: ScaleIcon, lockKey: 'cluster' },
+  { id: 'flashcards', label: 'Flashcard', Icon: FlashcardIcon },
+  { id: 'enricher', label: 'Tra từ', Icon: SearchIcon },
 ]
 
 const MORE = [
+  { id: 'cluster', label: 'Phân biệt', Icon: ScaleIcon, lockKey: 'cluster' },
+  { id: 'collocations', label: 'Cụm từ', Icon: CollocationIcon },
   { id: 'bank', label: 'Ngân hàng đề', Icon: BankIcon, lockKey: 'bank' },
   { id: 'passage', label: 'Đoạn văn', Icon: PassageIcon },
   { id: 'listen', label: 'Drill nghe', Icon: ListenIcon },
@@ -100,19 +120,19 @@ function TabButton({ active, label, Icon, locked, onClick }) {
     <button
       onClick={onClick}
       aria-current={active ? 'page' : undefined}
-      className={`relative flex min-h-[52px] flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-1 py-1 transition ${
-        active ? 'text-accent' : 'text-muted active:bg-accent-soft'
+      className={`relative flex min-h-[58px] flex-1 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1 transition ${
+        active ? 'text-accent' : 'text-muted active:bg-canvas'
       }`}
     >
       <span className="relative">
         <Icon />
         {locked && (
-          <span className="absolute -right-2 -top-1 text-[10px] leading-none" aria-hidden="true">
-            🔒
+          <span className="absolute -right-3 -top-1 rounded-full border border-rule bg-surface px-1 text-[8px] font-semibold uppercase leading-tight text-muted">
+            Pro
           </span>
         )}
       </span>
-      <span className="text-[10.5px] font-semibold leading-none">{label}</span>
+      <span className="text-[10.5px] font-medium leading-none">{label}</span>
     </button>
   )
 }
@@ -165,7 +185,11 @@ export default function MobileTabBar({ view, setView, locks = {} }) {
                   >
                     <Icon className="h-6 w-6 shrink-0" />
                     <span className="flex-1 text-[16px] font-semibold">{label}</span>
-                    {locked && <span className="text-[13px]" aria-hidden="true">🔒</span>}
+                    {locked && (
+                      <span className="rounded-full border border-rule px-2 py-0.5 text-[11px] font-semibold uppercase text-muted">
+                        Pro
+                      </span>
+                    )}
                   </button>
                 )
               })}
@@ -175,7 +199,7 @@ export default function MobileTabBar({ view, setView, locks = {} }) {
       )}
 
       {/* ── Thanh tab cố định đáy ── */}
-      <nav className="inset-bottom fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-surface/95 backdrop-blur-md">
+      <nav className="inset-bottom fixed inset-x-0 bottom-0 z-40 border-t border-rule bg-surface/96 shadow-card backdrop-blur-md">
         <div className="mx-auto flex max-w-[660px] items-stretch gap-0.5 px-1.5 pt-1">
           {PRIMARY.map(({ id, label, Icon, lockKey }) => (
             <TabButton

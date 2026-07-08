@@ -36,6 +36,48 @@
       "why": "Đặt cạnh 'reserved' để làm nổi nghĩa, và cho thấy đây là từ trang trọng."
     }
   ],
+  "collocations": [
+    {
+      "phrase": "a loquacious host",
+      "pattern": "adjective + noun",
+      "vi": "một người chủ chuyện trò nhiều",
+      "example": "The loquacious host kept the guests entertained through dinner.",
+      "note": "Tự nhiên khi nói về người nói nhiều nhưng vẫn có duyên.",
+      "register": "formal"
+    },
+    {
+      "phrase": "a loquacious speaker",
+      "pattern": "adjective + noun",
+      "vi": "một diễn giả nói rất nhiều",
+      "example": "The loquacious speaker filled the entire hour without notes.",
+      "note": "Có thể trung tính hoặc hơi chê tùy ngữ cảnh.",
+      "register": "formal"
+    },
+    {
+      "phrase": "grow loquacious",
+      "pattern": "verb + adjective",
+      "vi": "trở nên nói nhiều",
+      "example": "He tends to grow loquacious when the topic turns to politics.",
+      "note": "Nhấn mạnh sự thay đổi từ im lặng sang nói nhiều.",
+      "register": "neutral"
+    },
+    {
+      "phrase": "surprisingly loquacious",
+      "pattern": "adverb + adjective",
+      "vi": "nói nhiều một cách bất ngờ",
+      "example": "The normally quiet student was surprisingly loquacious during the debate.",
+      "note": "Hữu ích khi đối lập với tính cách thường ngày.",
+      "register": "neutral"
+    },
+    {
+      "phrase": "loquacious by nature",
+      "pattern": "adjective + prepositional phrase",
+      "vi": "vốn có tính nói nhiều",
+      "example": "She is loquacious by nature, but she listens carefully too.",
+      "note": "Dùng để mô tả đặc điểm tính cách ổn định.",
+      "register": "formal"
+    }
+  ],
   "synonym_cluster": {
     "theme_vi": "nói nhiều",
     "members": [

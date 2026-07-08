@@ -11,7 +11,7 @@ export const CONNOTATION = {
 export function Caption({ children, className = '' }) {
   return (
     <span
-      className={`text-[12px] font-semibold uppercase tracking-[0.09em] text-muted ${className}`}
+      className={`text-[11px] font-semibold uppercase tracking-[0.08em] text-muted ${className}`}
     >
       {children}
     </span>
@@ -37,7 +37,7 @@ export function ConnotationDot({ value, showLabel = true }) {
 export function RegisterChip({ value }) {
   if (!value) return null
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-2.5 py-0.5 text-[12px] font-semibold text-accent">
+    <span className="inline-flex items-center gap-1 rounded-full border border-rule bg-accent-soft px-2.5 py-0.5 text-[12px] font-semibold text-accent">
       {value}
     </span>
   )
@@ -46,7 +46,7 @@ export function RegisterChip({ value }) {
 /** Chip trung tính (loại từ, trái nghĩa…). */
 export function Chip({ children }) {
   return (
-    <span className="inline-block rounded-full border border-rule bg-canvas px-3 py-1 text-[14px] font-medium text-ink">
+    <span className="inline-block rounded-full border border-rule bg-surface px-3 py-1 text-[14px] font-medium text-ink">
       {children}
     </span>
   )

@@ -1,10 +1,12 @@
 // App — vỏ chung + Enricher (ENCODE). Điều hướng giữa các màn theo pha.
 // Triết lý: mỗi màn phải bắt người dùng NHỚ LẠI, không mời họ ĐỌC LẠI.
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import WordCard from './components/WordCard.jsx'
 import MobileTabBar from './components/MobileTabBar.jsx'
 import SavedList from './components/SavedList.jsx'
+import CollocationBank from './components/CollocationBank.jsx'
+import Flashcards from './components/Flashcards.jsx'
 import Review from './components/Review.jsx'
 import PassageMaker from './components/PassageMaker.jsx'
 import ListenDrill from './components/ListenDrill.jsx'
@@ -23,12 +25,15 @@ import loquaciousFixture from './fixtures/loquacious.json'
 
 function useTheme() {
   const [theme, setTheme] = useState(
-    () => document.documentElement.getAttribute('data-theme') || 'light',
+    () => {
+      const t = document.documentElement.getAttribute('data-theme')
+      return t === 'dark' ? 'dark' : 'light'
+    },
   )
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme)
     try {
-      localStorage.setItem('gre-l2:theme', theme)
+      localStorage.setItem('gre-l2:theme:v3', theme)
     } catch {
       /* bỏ qua */
     }
@@ -63,9 +68,8 @@ function SunMoon({ theme }) {
 function SkeletonCard() {
   return (
     <div className="overflow-hidden rounded-card border border-rule bg-surface shadow-card">
-      <div className="h-1.5 w-full bg-grad opacity-40" />
       <div className="p-7">
-        <div className="h-10 w-56 animate-pulse rounded-xl bg-rule" />
+        <div className="h-12 w-56 animate-pulse rounded-xl bg-rule" />
         <div className="mt-5 space-y-4">
           {[0, 1, 2].map((i) => (
             <div key={i} className="border-t border-rule pt-4">
@@ -92,6 +96,14 @@ export default function App() {
   const cardSaved = card ? isSaved(card.word) : false
   const clusterLocked = !evalGate('cluster').unlocked
   const bankLocked = !evalGate('bank').unlocked
+  const collocationCount = useMemo(
+    () =>
+      saved.reduce((total, e) => {
+        const cached = getCached(e.word)
+        return total + (Array.isArray(cached?.collocations) ? cached.collocations.length : 0)
+      }, 0),
+    [saved],
+  )
 
   useEffect(() => {
     function onKey(e) {
@@ -175,33 +187,38 @@ export default function App() {
     setSaved(removeSavedWord(w))
   }
 
-  const navBtn = (id, label, { locked = false } = {}) => (
+  const navBtn = (id, label, { locked = false, quiet = false } = {}) => (
     <button
       onClick={() => setView(id)}
-      className={`rounded-full px-4 py-2 text-[14px] font-bold transition ${
+      className={`inline-flex min-h-10 items-center rounded-full border px-4 py-2 text-[14px] font-medium transition ${
         view === id
-          ? 'bg-grad text-white shadow-soft'
-          : 'text-muted hover:bg-accent-soft hover:text-accent'
+          ? 'border-accent bg-accent text-[var(--color-canvas)] shadow-soft'
+          : quiet
+            ? 'border-rule bg-surface/55 text-muted hover:border-accent hover:text-ink'
+            : 'border-rule bg-surface/80 text-muted hover:border-accent hover:text-ink'
       }`}
     >
-      {locked && <span className="mr-1 text-[11px]">🔒</span>}
       {label}
+      {locked && (
+        <span className="ml-2 rounded-full border border-rule bg-canvas/50 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
+          Pro
+        </span>
+      )}
     </button>
   )
 
   return (
-    <div className="min-h-dvh bg-canvas text-ink">
+    <div className="relative min-h-dvh bg-canvas text-ink">
       {/* pt-screen + pb-tabbar: chừa notch ở trên và thanh tab ở dưới (mobile);
           desktop/tablet override bằng sm:* về padding thường. */}
-      <div className="mx-auto max-w-[660px] px-4 pt-screen pb-tabbar sm:px-6 sm:pt-9 sm:pb-9">
+      <div className="relative mx-auto max-w-[720px] px-4 pt-screen pb-tabbar sm:px-6 sm:pt-9 sm:pb-9">
         {/* ── Đầu trang ── */}
-        <header className="flex items-start justify-between gap-3">
+        <header className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h1 className="font-display text-[24px] font-bold tracking-tight sm:text-[28px]">
-              <span className="text-grad">GRE</span>
-              <span className="text-ink"> Vocab L2</span>
+            <h1 className="font-display text-[34px] font-semibold leading-tight tracking-normal text-ink sm:text-[42px]">
+              GRE Vocabulary
             </h1>
-            <p className="mt-0.5 hidden text-[14px] text-muted sm:block">
+            <p className="mt-1 max-w-[460px] text-[13px] leading-relaxed text-muted sm:text-[14px]">
               Gõ một từ → AI dựng thẻ từ tươi mới, tối ưu cho người Việt.
             </p>
           </div>
@@ -209,26 +226,31 @@ export default function App() {
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Sang nền sáng' : 'Sang nền tối'}
             title="Đổi nền sáng/tối"
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-rule bg-surface text-muted shadow-card hover:text-accent"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-rule bg-surface/80 text-muted shadow-card transition hover:border-accent hover:text-accent"
           >
             <SunMoon theme={theme} />
           </button>
         </header>
 
         {/* ── Điều hướng (desktop/tablet) — mobile dùng MobileTabBar dưới đáy ── */}
-        <nav className="mt-7 hidden flex-wrap items-center gap-1.5 sm:flex">
-          {navBtn('saved', `Bảng từ${saved.length ? ` (${saved.length})` : ''}`)}
-          {navBtn('enricher', 'Tra từ')}
-          {navBtn('review', 'Ôn tập')}
-          <span className="mx-1 h-5 w-px bg-rule" />
-          {navBtn('cluster', 'Phân biệt', { locked: clusterLocked })}
-          {navBtn('bank', 'Ngân hàng đề', { locked: bankLocked })}
-          {navBtn('passage', 'Đoạn văn')}
-          {navBtn('listen', 'Drill nghe')}
-          {navBtn('sync', 'Đồng bộ')}
+        <nav className="mt-7 hidden gap-2 border-y border-rule py-3 sm:grid">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {navBtn('saved', `Bảng từ${saved.length ? ` (${saved.length})` : ''}`)}
+            {navBtn('review', 'Ôn tập')}
+            {navBtn('flashcards', 'Flashcard')}
+            {navBtn('enricher', 'Tra từ')}
+            {navBtn('collocations', `Cụm từ${collocationCount ? ` (${collocationCount})` : ''}`)}
+            {navBtn('passage', 'Đoạn văn')}
+            {navBtn('listen', 'Drill nghe')}
+            {navBtn('sync', 'Đồng bộ')}
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            {navBtn('cluster', 'Phân biệt', { locked: clusterLocked, quiet: true })}
+            {navBtn('bank', 'Ngân hàng đề', { locked: bankLocked, quiet: true })}
+          </div>
         </nav>
 
-        <main className="mt-8">
+        <main className="mt-7">
           {view === 'enricher' && (
             <>
               <form
@@ -236,7 +258,7 @@ export default function App() {
                   e.preventDefault()
                   run()
                 }}
-                className="flex gap-2.5"
+                className="grid gap-2.5 sm:flex"
               >
                 <input
                   ref={inputRef}
@@ -247,12 +269,12 @@ export default function App() {
                   autoComplete="off"
                   autoCapitalize="off"
                   spellCheck={false}
-                  className="flex-1 rounded-2xl border-2 border-rule bg-surface px-4 py-3.5 font-display text-[18px] text-ink shadow-card outline-none focus:border-accent"
+                  className="min-w-0 flex-1 rounded-card border border-rule bg-surface px-4 py-3.5 text-[18px] text-ink shadow-card outline-none focus:border-accent"
                 />
                 <button
                   type="submit"
                   disabled={status === 'loading' || !word.trim()}
-                  className="rounded-2xl bg-grad px-6 py-3.5 text-[16px] font-bold text-white shadow-soft transition hover:opacity-95 disabled:opacity-40"
+                  className="rounded-card bg-grad px-6 py-3.5 text-[16px] font-semibold text-white shadow-soft transition hover:opacity-95 disabled:opacity-40"
                 >
                   {status === 'loading' ? 'Đang tra…' : 'Enrich ⏎'}
                 </button>
@@ -267,7 +289,7 @@ export default function App() {
 
               <div className="mt-7">
                 {status === 'idle' && (
-                  <div className="rounded-card border-2 border-dashed border-rule bg-surface p-10 text-center">
+                  <div className="rounded-card border border-dashed border-rule bg-surface p-10 text-center shadow-card">
                     <Caption>màn trống</Caption>
                     <p className="mt-2.5 font-display text-[20px] font-bold text-ink">
                       Gõ một từ GRE để xem thẻ.
@@ -315,7 +337,13 @@ export default function App() {
             />
           )}
 
+          {view === 'collocations' && (
+            <CollocationBank items={saved} onViewWord={viewSaved} />
+          )}
+
           {view === 'review' && <Review onExit={() => setView('saved')} />}
+
+          {view === 'flashcards' && <Flashcards />}
 
           {view === 'cluster' && (
             <GateNotice gate={evalGate('cluster')}>

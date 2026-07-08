@@ -13,6 +13,12 @@ Hard rules:
   small, return a small list. Do not pad it.
 - \`mnemonic_vi\`: create a vivid Vietnamese keyword mnemonic that links the English
   SOUND to the MEANING. Make it concrete and a little absurd (easier to remember).
+- \`collocations\`: include 4-7 common, natural collocations for the target word.
+  Prefer academic, formal, or GRE-relevant collocations when they are natural and commonly used.
+  Each item must be a short phrase, such as "an impertinent remark" or "pose a threat", not a full sentence.
+  Include a mix of common patterns when applicable: adjective+noun, verb+noun, noun+verb, adverb+adjective, or prepositional phrases.
+  Do not invent rare, awkward, or technically possible but unnatural combinations.
+  If the word has limited natural collocations, provide fewer high-quality collocations rather than forcing the count.
 - \`synonym_cluster\`: include ONLY if the word belongs to a meaningful GRE synonym
   group; otherwise set it to null. Rank members by intensity and note register +
   connotation so the Vietnamese learner can tell them apart (this is the #1 thing
@@ -42,6 +48,16 @@ JSON shape:
   ],
   "mnemonic_vi": { "keyword": string, "image": string },
   "examples": [ { "sentence": string, "why": string } ],
+  "collocations": [
+    {
+      "phrase": string,
+      "pattern": string,
+      "vi": string,
+      "example": string,
+      "note": string,
+      "register": string
+    }
+  ],
   "synonym_cluster": null | {
     "theme_vi": string,
     "members": [
