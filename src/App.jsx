@@ -14,6 +14,7 @@ import ClusterDrill from './components/ClusterDrill.jsx'
 import QuestionBank from './components/QuestionBank.jsx'
 import GateNotice from './components/GateNotice.jsx'
 import SyncSettings from './components/SyncSettings.jsx'
+import IpaLab from './components/IpaLab.jsx'
 import { Caption } from './components/ui.jsx'
 import { pullIfRemoteNewer } from './lib/cloudSync.js'
 import { evalGate } from './lib/gates.js'
@@ -21,6 +22,7 @@ import { enrichWord } from './lib/enrichWord.js'
 import { getCached } from './lib/cache.js'
 import { listSaved, isSaved, toggleSaved, removeSaved as removeSavedWord } from './lib/saved.js'
 import { removeSrs } from './lib/srs.js'
+import { useLanguage } from './lib/i18n.jsx'
 import loquaciousFixture from './fixtures/loquacious.json'
 
 function useTheme() {
@@ -91,6 +93,7 @@ export default function App() {
   const [error, setError] = useState('')
   const [saved, setSaved] = useState(() => listSaved())
   const [theme, toggleTheme] = useTheme()
+  const { language, toggleLanguage, tr } = useLanguage()
   const inputRef = useRef(null)
 
   const cardSaved = card ? isSaved(card.word) : false
@@ -222,14 +225,24 @@ export default function App() {
               Gõ một từ → AI dựng thẻ từ tươi mới, tối ưu cho người Việt.
             </p>
           </div>
-          <button
-            onClick={toggleTheme}
-            aria-label={theme === 'dark' ? 'Sang nền sáng' : 'Sang nền tối'}
-            title="Đổi nền sáng/tối"
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-rule bg-surface/80 text-muted shadow-card transition hover:border-accent hover:text-accent"
-          >
-            <SunMoon theme={theme} />
-          </button>
+          <div className="flex shrink-0 gap-2" data-i18n-skip>
+            <button
+              onClick={toggleLanguage}
+              aria-label={language === 'vi' ? 'Switch to English' : 'Switch to Vietnamese'}
+              title={language === 'vi' ? 'Switch to English' : 'Switch to Vietnamese'}
+              className="grid h-11 min-w-11 place-items-center rounded-full border border-rule bg-surface/80 px-2 text-[12px] font-bold tracking-[0.08em] text-muted shadow-card transition hover:border-accent hover:text-accent"
+            >
+              {language === 'vi' ? 'EN' : 'VI'}
+            </button>
+            <button
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? tr('Sang nền sáng', 'Switch to light theme') : tr('Sang nền tối', 'Switch to dark theme')}
+              title={tr('Đổi nền sáng/tối', 'Toggle light/dark theme')}
+              className="grid h-11 w-11 place-items-center rounded-full border border-rule bg-surface/80 text-muted shadow-card transition hover:border-accent hover:text-accent"
+            >
+              <SunMoon theme={theme} />
+            </button>
+          </div>
         </header>
 
         {/* ── Điều hướng (desktop/tablet) — mobile dùng MobileTabBar dưới đáy ── */}
@@ -242,6 +255,7 @@ export default function App() {
             {navBtn('collocations', `Cụm từ${collocationCount ? ` (${collocationCount})` : ''}`)}
             {navBtn('passage', 'Đoạn văn')}
             {navBtn('listen', 'Drill nghe')}
+            {navBtn('ipa', 'IPA')}
             {navBtn('sync', 'Đồng bộ')}
           </div>
           <div className="flex flex-wrap items-center gap-1.5">
@@ -360,6 +374,8 @@ export default function App() {
           {view === 'passage' && <PassageMaker />}
 
           {view === 'listen' && <ListenDrill />}
+
+          {view === 'ipa' && <IpaLab />}
 
           {view === 'sync' && <SyncSettings />}
         </main>

@@ -98,6 +98,14 @@ function SyncIcon({ className = 'h-5 w-5' }) {
     </svg>
   )
 }
+function IpaIcon({ className = 'h-5 w-5' }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path d="M5 5.5h14v13H5z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+      <path d="M8 9h3M9.5 9v6M14 9.5c2.5 0 2.5 4 0 4h-1.5M16.5 9.5v5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 const PRIMARY = [
   { id: 'saved', label: 'Bảng từ', Icon: LibraryIcon },
@@ -112,6 +120,7 @@ const MORE = [
   { id: 'bank', label: 'Ngân hàng đề', Icon: BankIcon, lockKey: 'bank' },
   { id: 'passage', label: 'Đoạn văn', Icon: PassageIcon },
   { id: 'listen', label: 'Drill nghe', Icon: ListenIcon },
+  { id: 'ipa', label: 'Bảng IPA', Icon: IpaIcon },
   { id: 'sync', label: 'Đồng bộ', Icon: SyncIcon },
 ]
 
